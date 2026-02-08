@@ -1,6 +1,5 @@
 "use client"
 
-import { Keyboard } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
 import { useAccount, useConnect, useDisconnect } from "wagmi"
@@ -48,14 +47,6 @@ export function Header() {
 				</div>
 
 				<div className="flex items-center gap-3">
-					{/* Keyboard hint - command palette style */}
-					<div className="hidden items-center gap-1.5 text-xs text-muted-foreground/50 sm:flex">
-						<Keyboard className="h-3 w-3" />
-						<kbd className="rounded border bg-muted px-1.5 py-0.5 font-mono text-[10px] transition-all duration-150 hover:bg-muted/80 hover:scale-105 cursor-pointer">
-							⌘K
-						</kbd>
-					</div>
-
 					{isConnected ? (
 						<>
 							{chain && (
@@ -69,7 +60,7 @@ export function Header() {
 								onClick={() => disconnect()}
 								className="font-mono text-xs transition-all duration-150 hover:border-destructive/50 hover:text-destructive"
 							>
-								{truncateAddress(address!)}
+								{truncateAddress(address)}
 							</Button>
 						</>
 					) : (

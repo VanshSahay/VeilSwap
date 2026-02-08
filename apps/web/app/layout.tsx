@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import { Geist, Geist_Mono } from "next/font/google"
 import { headers } from "next/headers"
+import { Toaster } from "sonner"
 import { cookieToInitialState } from "wagmi"
 import { Header } from "#/components/layout/header"
 import { wagmiConfig } from "#/config/wagmi"
@@ -40,6 +41,7 @@ export default async function RootLayout({
 				<Web3Provider initialState={initialState}>
 					<Header />
 					<main>{children}</main>
+					<Toaster richColors position="bottom-right" />
 				</Web3Provider>
 			</body>
 		</html>
