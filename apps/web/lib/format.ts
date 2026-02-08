@@ -1,4 +1,4 @@
-import { type Address, formatUnits } from "viem"
+import { formatUnits } from "viem"
 
 /** Format a bigint token amount to human-readable string */
 export function formatTokenAmount(
@@ -13,7 +13,7 @@ export function formatTokenAmount(
 }
 
 /** Truncate an address to 0x1234...abcd */
-export function truncateAddress(address?: Address, chars = 4): string {
+export function truncateAddress(address?: string, chars = 4): string {
 	return address
 		? `${address.slice(0, chars + 2)}...${address.slice(-chars)}`
 		: ""
