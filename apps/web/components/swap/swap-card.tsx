@@ -1,7 +1,15 @@
 "use client"
 
-import { ArrowDown, Clock, Keyboard, Settings2, TrendingUp } from "lucide-react"
+import {
+	ArrowDown,
+	Clock,
+	Eye,
+	Keyboard,
+	Settings2,
+	TrendingUp,
+} from "lucide-react"
 import { useCallback, useState } from "react"
+import { toast } from "sonner"
 import { parseUnits } from "viem"
 import { useAccount, useChainId } from "wagmi"
 import { IntentTracker } from "#/components/intent/intent-tracker"
@@ -104,6 +112,84 @@ export function SwapCard() {
 
 	const isActive = phase !== "idle" && phase !== "filled" && phase !== "failed"
 
+	const demoToasts = useCallback(() => {
+		const mockTxHash = "0x1234...abcd"
+
+		// Approving
+		setTimeout(() => {
+			toast.loading("Approving USDC...", {
+				id: "demo-approve",
+				description: "Waiting for wallet confirmation",
+			})
+		}, 0)
+
+		// Approved
+		setTimeout(() => {
+			toast.success("Approved USDC", {
+				id: "demo-approve",
+				description: "Token allowance set",
+			})
+		}, 1500)
+
+		// Submitting
+		setTimeout(() => {
+			toast.loading("Submitting intent...", {
+				id: "demo-submit",
+				description: "Creating swap order on-chain",
+			})
+		}, 2000)
+
+		// Submitted
+		setTimeout(() => {
+			toast.success("Intent submitted", {
+				id: "demo-submit",
+				description: `Tx: ${mockTxHash}`,
+				action: {
+					label: "View",
+					onClick: () =>
+						window.open(`https://sepolia.basescan.org/tx/${mockTxHash}`),
+				},
+			})
+		}, 3500)
+
+		// Processing
+		setTimeout(() => {
+			toast.loading("Processing...", {
+				id: "demo-process",
+				description: "MPC nodes are filling your order",
+			})
+		}, 4000)
+
+		// Settling
+		setTimeout(() => {
+			toast.loading("Settling...", {
+				id: "demo-process",
+				description: "Finalizing on-chain settlement",
+			})
+		}, 5500)
+
+		// Filled
+		setTimeout(() => {
+			toast.success("Swap complete!", {
+				id: "demo-process",
+				description: "Received 0.4 ETH",
+				action: {
+					label: "View",
+					onClick: () =>
+						window.open(`https://sepolia.basescan.org/tx/${mockTxHash}`),
+				},
+			})
+		}, 7000)
+
+		// Error example (separate)
+		setTimeout(() => {
+			toast.error("Transaction failed", {
+				id: "demo-error",
+				description: "User rejected the request",
+			})
+		}, 8500)
+	}, [])
+
 	const rate =
 		amountIn && amountOut && Number.parseFloat(amountIn) > 0
 			? (Number.parseFloat(amountOut) / Number.parseFloat(amountIn)).toFixed(6)
@@ -113,12 +199,6 @@ export function SwapCard() {
 		<div className="w-full max-w-[440px] animate-fade-in-up">
 			{/* Command palette style header */}
 			<div className="mb-4 flex items-center justify-between animate-fade-in-up stagger-2">
-				<div className="flex items-center gap-2">
-					<div className="rounded-md bg-muted px-2 py-1 text-xs font-mono text-muted-foreground transition-colors duration-150 hover:bg-muted/80">
-						⌘K
-					</div>
-					<span className="text-sm text-muted-foreground">Quick swap</span>
-				</div>
 				<button
 					type="button"
 					className="flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground transition-all duration-150 hover:translate-x-0.5 active:scale-95"
@@ -247,6 +327,18 @@ export function SwapCard() {
 						{token.symbol}
 					</button>
 				))}
+			</div>
+
+			{/* Visualise button */}
+			<div className="mt-3 animate-fade-in-up stagger-5">
+				<button
+					type="button"
+					onClick={demoToasts}
+					className="flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground transition-all duration-150 hover:translate-x-0.5 active:scale-95"
+				>
+					<Eye className="h-3 w-3" />
+					Visualise flow
+				</button>
 			</div>
 		</div>
 	)
